@@ -1,20 +1,113 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { CreateTask } from "@/screens/CreateTask"
+import { Home } from "@/screens/Home"
+import { PersistGate } from "redux-persist/integration/react"
+
+import { persistor, store } from "@/store/store"
+import { NavigationContainer } from "@react-navigation/native"
+import { createNativeStackNavigator } from "@react-navigation/native-stack"
+import React from "react"
+import { Text, View } from "react-native"
+
+import { HeaderButton } from "@/components"
+import { AllTasks } from "@/screens/AllTasks"
+import { IcomoonIconsName } from "@/types/IconType"
+import { EScreens } from "@/types/navigation"
+import { Provider } from "react-redux"
 
 export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
-}
+	const Stack = createNativeStackNavigator()
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+	return (
+		<Provider store={store}>
+			<PersistGate loading={null} persistor={persistor}>
+				<NavigationContainer>
+					<Stack.Navigator>
+						<Stack.Screen
+							name={EScreens.HOME}
+							component={Home}
+							options={{
+								headerShown: false,
+							}}
+						/>
+						<Stack.Screen
+							name={EScreens.AllTASKS}
+							component={AllTasks}
+							options={{
+								header: (props) => (
+									<View
+										style={{
+											height: 90,
+											backgroundColor: "#4A3780",
+											justifyContent: "center",
+											alignItems: "center",
+											flexDirection: "row",
+										}}
+									>
+										<HeaderButton
+											propsStyle={{
+												top: 50,
+												width: 30,
+												height: 30,
+												paddingLeft: 5,
+											}}
+											onPress={() => {
+												props.navigation.navigate("Home")
+												console.log("press")
+											}}
+											navigation={props.navigation}
+											name={IcomoonIconsName.CIRCLELEFT}
+											size={13}
+										/>
+										<Text
+											style={{
+												top: 25,
+												color: "#fff",
+												fontWeight: "600",
+												fontSize: 16,
+											}}
+										>
+											All tasks
+										</Text>
+									</View>
+								),
+							}}
+						/>
+						<Stack.Screen
+							name={EScreens.CREATETASK}
+							component={CreateTask}
+							options={{
+								header: (props) => (
+									<View
+										style={{
+											height: 130,
+											backgroundColor: "#4A3780",
+											justifyContent: "center",
+											alignItems: "center",
+											flexDirection: "row",
+										}}
+									>
+										<HeaderButton
+											navigation={props.navigation}
+											name={IcomoonIconsName.BACK}
+											size={18}
+										/>
+										<Text
+											style={{
+												top: 20,
+												color: "#fff",
+												fontWeight: "600",
+												fontSize: 16,
+											}}
+										>
+											Add New Tasks
+										</Text>
+									</View>
+								),
+							}}
+						/>
+					</Stack.Navigator>
+				</NavigationContainer>
+			</PersistGate>
+		</Provider>
+	)
+}
