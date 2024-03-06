@@ -4,6 +4,7 @@ import { defaultStyles } from '@/constants/Styles';
 import { useAppSelector, useDebounce } from '@/hooks';
 import React, { FC, useState } from 'react';
 import { FlatList, StyleSheet, Text, TextInput, View } from 'react-native';
+import Swipeable from 'react-native-gesture-handler/Swipeable';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 interface IProps {}
