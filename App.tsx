@@ -8,7 +8,6 @@ import React from 'react';
 import { Text, View } from 'react-native';
 
 import { HeaderButton } from '@/components';
-import { Home } from '@/screens';
 import { AllTasks } from '@/screens/AllTasks';
 import { IcomoonIconsName } from '@/types/IconType';
 import { EScreens } from '@/types/navigation';
@@ -24,13 +23,14 @@ export default function App() {
         <PersistGate loading={null} persistor={persistor}>
           <NavigationContainer>
             <Stack.Navigator>
+              {/* <Stack.Screen name={EScreens.example} component={Example} /> 
               <Stack.Screen
                 name={EScreens.HOME}
                 component={Home}
                 options={{
                   headerShown: false,
                 }}
-              />
+              />*/}
               <Stack.Screen
                 name={EScreens.AllTASKS}
                 component={AllTasks}

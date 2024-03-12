@@ -2,15 +2,20 @@ import { ITodo } from '@/types/todoType';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
 
+// Define a type for the slice state
 interface TodoState {
   todos: ITodo[];
+  searchedTotos: ITodo[] | [];
   status: number;
+  dateRdx: any;
 }
 
 // Define the initial state using that type
 const initialState: TodoState = {
   status: 0,
   todos: [],
+  searchedTotos: [],
+  dateRdx: new Date(),
 };
 
 export const todoSlice = createSlice({
@@ -40,12 +45,21 @@ export const todoSlice = createSlice({
         toggle.completed = !toggle.completed;
       }
     },
-
     statusFilter(state, action: PayloadAction<number>) {
       state.status = action.payload;
     },
+
     searchTodo(state, action: PayloadAction<{ title: string }>) {
       state.todos.filter(item => item.title.includes(action.payload.title));
+    },
+    filterTodoByDate(state, action: PayloadAction<{ date: string }>) {
+      state.todos.filter(item => item.date === action.payload.date);
+      console.log(
+        'action.payload.date',
+        action.payload.date,
+        'state.todos.filter',
+        state.todos.filter(item => item.date === action.payload.date),
+      );
     },
   },
 });
@@ -57,6 +71,7 @@ export const {
   statusFilter,
   deleteAllTodos,
   searchTodo,
+  filterTodoByDate,
 } = todoSlice.actions;
 
 export default todoSlice.reducer;

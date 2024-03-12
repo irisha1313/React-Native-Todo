@@ -15,7 +15,7 @@ interface IProps {
 }
 
 export const TackItem: FC<IProps> = ({ item, index }) => {
-  const todosLength = useAppSelector(state => state.todo.todos.length) - 1;
+  const todosLength = useAppSelector(state => state.todos.length) - 1;
   const compleatedTask = item.completed === true;
   const dispatch = useAppDispatch();
 

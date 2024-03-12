@@ -1,6 +1,6 @@
 import { Button, CategoryList } from '@/components';
 import Icon from '@/components/Icon/Icon';
-import { useAppDispatch, useAppSelector } from '@/hooks';
+import { useAppDispatch } from '@/hooks';
 import { addTodo } from '@/store/slises/TodoSlice';
 import { IcomoonIconsName, typedNavigation } from '@/types';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -16,7 +16,6 @@ interface IProps {
 }
 export const CreateTask: FC<IProps> = ({ navigation }) => {
   const dispatch = useAppDispatch();
-  const { todos } = useAppSelector(state => state.todo);
   const [title, setTitle] = React.useState('');
   const [category, setCategory] = React.useState(null);
   const [dateTime, setDateTime] = useState(new Date());

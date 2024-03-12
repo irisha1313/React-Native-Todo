@@ -15,8 +15,7 @@ const WIDTH_SCREEN = Dimensions.get('window').width;
 
 export const Home: FC<IProps> = ({ navigation }) => {
   const insets = useSafeAreaInsets();
-
-  const { todos, status: todoStatus } = useAppSelector(state => state.todo);
+  const todos = useAppSelector(state => state.todos);
   const compleated = todos.filter(todo => todo.completed);
   const dispatch = useAppDispatch();
 

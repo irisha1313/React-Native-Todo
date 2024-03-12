@@ -1,17 +1,33 @@
 import { AnimatedCategory, TackItem } from '@/components';
+import Icon from '@/components/Icon/Icon';
 import Colors from '@/constants/Colors';
 import { defaultStyles } from '@/constants/Styles';
 import { useAppSelector, useDebounce } from '@/hooks';
+import { IcomoonIconsName } from '@/types';
+import moment from 'moment';
 import React, { FC, useState } from 'react';
-import { FlatList, StyleSheet, Text, TextInput, View } from 'react-native';
-import Swipeable from 'react-native-gesture-handler/Swipeable';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
+
+import {
+  FlatList,
+  Pressable,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-interface IProps {}
+interface IProps {
+  navigation: any;
+}
 
-export const AllTasks: FC<IProps> = () => {
-  const todos = useAppSelector(state => state.todo.todos);
-  const todoStatus = useAppSelector(state => state.todo.status);
+export const AllTasks: FC<IProps> = ({ navigation }) => {
+  const todoStatus = useAppSelector(state => state.status);
+  const { todos } = useAppSelector(state => state);
+  // const date = useAppSelector(state => state.date);
+  ////
+
   const filteredTodoByStatus = () => {
     if (todoStatus === 1) {
       return todos.filter(todo => todo.completed);
@@ -21,26 +37,73 @@ export const AllTasks: FC<IProps> = () => {
       return todos;
     }
   };
+
   const [searchValue, setSearchValue] = useState('');
   const searchValueDebounced = useDebounce(searchValue, 500);
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  const [date, setDate] = useState(new Date());
+  const showDatePicker = () => {
+    setDatePickerVisibility(true);
+  };
+  const hideDatePicker = () => {
+    setDatePickerVisibility(false);
+  };
+  const handleConfirm = date => {
+    console.warn('A date has been picked: ', date);
+    setDate(date);
+    hideDatePicker();
+  };
+  const currentDate = moment(date).format('l'); //
 
-  const filteredTodos = filteredTodoByStatus().filter(item => {
-    const titleTime = (item.title + item.date).toLowerCase();
-    return titleTime.includes(searchValueDebounced.toLowerCase());
-  });
+  const filteredTodos = filteredTodoByStatus()
+    .filter(item => {
+      const titleTime = (item.title + item.date).toLowerCase();
+      // if (item.date.includes(currentDate)) {
+      // consol000e.log(item, 'item');
+      // return item;
+      // } else {
+      return titleTime.includes(searchValueDebounced.toLowerCase());
+      // }
+    })
+    .filter(item => item.date.includes(currentDate));
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container]}>
       <AnimatedCategory />
       <View style={[defaultStyles.line]} />
-      <View style={styles.searchContainer}>
+      <View
+        style={[
+          styles.searchContainer,
+          {
+            width: '100%',
+            marginBottom: 20,
+            marginRight: 50,
+            paddingHorizontal: 30,
+          },
+        ]}>
         <TextInput
-          placeholder="Search task "
+          placeholder="Search task"
           style={styles.search}
           onChangeText={title => setSearchValue(title)}
         />
-        <Text>Tasks: {todos.length}</Text>
+        <View style={styles.info}>
+          <Text>Tasks: {todos.length}</Text>
+
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+            <Text>{currentDate}</Text>
+            <Pressable onPress={showDatePicker}>
+              <Icon name={IcomoonIconsName.EVENT} />
+            </Pressable>
+          </View>
+        </View>
       </View>
+
+      <DateTimePickerModal
+        isVisible={isDatePickerVisible}
+        mode="date"
+        onConfirm={handleConfirm}
+        onCancel={hideDatePicker}
+      />
 
       {filteredTodos.length === 0 ? (
         <Text style={{ color: 'red', fontSize: 18 }}>
@@ -78,10 +141,17 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.ligthBlue,
     borderRadius: 10,
     marginVertical: 20,
+    width: '100%',
   },
   searchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     maxWidth: 270,
+  },
+  info: {
+    flexDirection: 'column',
+    justifyContent: 'space-evenly',
+    alignItems: 'flex-end',
+    gap: 5,
   },
 });
