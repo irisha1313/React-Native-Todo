@@ -25,8 +25,6 @@ interface IProps {
 export const AllTasks: FC<IProps> = ({ navigation }) => {
   const todoStatus = useAppSelector(state => state.status);
   const { todos } = useAppSelector(state => state);
-  // const date = useAppSelector(state => state.date);
-  ////
 
   const filteredTodoByStatus = () => {
     if (todoStatus === 1) {
@@ -40,32 +38,26 @@ export const AllTasks: FC<IProps> = ({ navigation }) => {
 
   const [searchValue, setSearchValue] = useState('');
   const searchValueDebounced = useDebounce(searchValue, 500);
-  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-  const [date, setDate] = useState(new Date());
-  const showDatePicker = () => {
-    setDatePickerVisibility(true);
-  };
-  const hideDatePicker = () => {
-    setDatePickerVisibility(false);
-  };
-  const handleConfirm = date => {
-    console.warn('A date has been picked: ', date);
-    setDate(date);
-    hideDatePicker();
-  };
-  const currentDate = moment(date).format('l'); //
+  // const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  // const [date, setDate] = useState(new Date());
+  // const showDatePicker = () => {
+  //   setDatePickerVisibility(true);
+  // };
+  // const hideDatePicker = () => {
+  //   setDatePickerVisibility(false);
+  // };
+  // const handleConfirm = date => {
+  //   console.warn('A date has been picked: ', date);
+  //   setDate(date);
+  //   hideDatePicker();
+  // };
+  // const currentDate = moment(date).format('l'); //
 
-  const filteredTodos = filteredTodoByStatus()
-    .filter(item => {
-      const titleTime = (item.title + item.date).toLowerCase();
-      // if (item.date.includes(currentDate)) {
-      // consol000e.log(item, 'item');
-      // return item;
-      // } else {
-      return titleTime.includes(searchValueDebounced.toLowerCase());
-      // }
-    })
-    .filter(item => item.date.includes(currentDate));
+  const filteredTodos = filteredTodoByStatus().filter(item => {
+    const titleTime = (item.title + item.date).toLowerCase();
+    // item.date.includes(currentDate);
+    return titleTime.includes(searchValueDebounced.toLowerCase());
+  });
 
   return (
     <SafeAreaView style={[styles.container]}>
@@ -89,21 +81,14 @@ export const AllTasks: FC<IProps> = ({ navigation }) => {
         <View style={styles.info}>
           <Text>Tasks: {todos.length}</Text>
 
-          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-            <Text>{currentDate}</Text>
-            <Pressable onPress={showDatePicker}>
-              <Icon name={IcomoonIconsName.EVENT} />
-            </Pressable>
-          </View>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              gap: 6,
+            }}></View>
         </View>
       </View>
-
-      <DateTimePickerModal
-        isVisible={isDatePickerVisible}
-        mode="date"
-        onConfirm={handleConfirm}
-        onCancel={hideDatePicker}
-      />
 
       {filteredTodos.length === 0 ? (
         <Text style={{ color: 'red', fontSize: 18 }}>

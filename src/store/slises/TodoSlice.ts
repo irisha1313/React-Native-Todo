@@ -1,21 +1,47 @@
-import { ITodo } from '@/types/todoType';
+import { Category, ITodo } from '@/types/todoType';
 import type { PayloadAction } from '@reduxjs/toolkit';
-import { createSlice } from '@reduxjs/toolkit';
+import { createSelector, createSlice } from '@reduxjs/toolkit';
+import { RootState } from '../store';
 
 // Define a type for the slice state
 interface TodoState {
   todos: ITodo[];
-  searchedTotos: ITodo[] | [];
   status: number;
-  dateRdx: any;
 }
 
 // Define the initial state using that type
 const initialState: TodoState = {
   status: 0,
-  todos: [],
-  searchedTotos: [],
-  dateRdx: new Date(),
+  todos: [
+    {
+      id: '12',
+      title: 'Create filter',
+      category: Category.GOAL,
+      date: '03/13/2024',
+      completed: false,
+    },
+    {
+      id: '122',
+      title: 'Go to the shop',
+      category: Category.TASK,
+      date: '03/13/2024',
+      completed: false,
+    },
+    {
+      id: '121',
+      title: 'get a drivers license',
+      category: Category.EVENT,
+      date: '03/14/2024',
+      completed: false,
+    },
+    {
+      id: '124',
+      title: 'Go to the concert ',
+      category: Category.EVENT,
+      date: '03/16/2024',
+      completed: false,
+    },
+  ],
 };
 
 export const todoSlice = createSlice({
@@ -48,18 +74,8 @@ export const todoSlice = createSlice({
     statusFilter(state, action: PayloadAction<number>) {
       state.status = action.payload;
     },
-
     searchTodo(state, action: PayloadAction<{ title: string }>) {
       state.todos.filter(item => item.title.includes(action.payload.title));
-    },
-    filterTodoByDate(state, action: PayloadAction<{ date: string }>) {
-      state.todos.filter(item => item.date === action.payload.date);
-      console.log(
-        'action.payload.date',
-        action.payload.date,
-        'state.todos.filter',
-        state.todos.filter(item => item.date === action.payload.date),
-      );
     },
   },
 });
@@ -71,7 +87,10 @@ export const {
   statusFilter,
   deleteAllTodos,
   searchTodo,
-  filterTodoByDate,
 } = todoSlice.actions;
 
 export default todoSlice.reducer;
+
+export const todos = (store: RootState) => store.todos;
+export const selectTodoListByDate = (date: string) =>
+  createSelector([todos], todos => todos.filter(e => e.date === date));

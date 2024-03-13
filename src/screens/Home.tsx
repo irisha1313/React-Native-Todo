@@ -1,23 +1,19 @@
 import { Button, Header, TackItem } from '@/components';
 import Colors from '@/constants/Colors';
-import { useAppDispatch, useAppSelector } from '@/hooks';
+import { useAppSelector } from '@/hooks';
 import { typedNavigation } from '@/types/navigation';
 import React, { FC } from 'react';
-import { Dimensions, FlatList, StyleSheet, Text, View } from 'react-native';
+import { FlatList, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface IProps {
   navigation: typedNavigation;
 }
-const WIDTH_CARD = Dimensions.get('window').width * 0.85;
-const ITEM_HEIGHT = 70;
-const WIDTH_SCREEN = Dimensions.get('window').width;
 
 export const Home: FC<IProps> = ({ navigation }) => {
   const insets = useSafeAreaInsets();
   const todos = useAppSelector(state => state.todos);
   const compleated = todos.filter(todo => todo.completed);
-  const dispatch = useAppDispatch();
 
   return (
     <>

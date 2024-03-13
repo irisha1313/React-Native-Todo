@@ -1,4 +1,3 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { configureStore } from '@reduxjs/toolkit';
 import {
   FLUSH,
@@ -7,23 +6,22 @@ import {
   PURGE,
   REGISTER,
   REHYDRATE,
-  persistReducer,
   persistStore,
 } from 'redux-persist';
 import { todoSlice } from './slises/TodoSlice';
 
-const persistConfig = {
-  key: 'root',
-  storage: AsyncStorage,
-};
+// const persistConfig = {
+//   key: 'root',
+//   storage: AsyncStorage,
+// };
 
-const persistedReducer = persistReducer<ReturnType<typeof todoSlice.reducer>>(
-  persistConfig,
-  todoSlice.reducer,
-);
+// const persistedReducer = persistReducer<ReturnType<typeof todoSlice.reducer>>(
+//   persistConfig,
+//   todoSlice.reducer,
+// );
 
 export const store = configureStore({
-  reducer: persistedReducer,
+  reducer: todoSlice.reducer,
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
       serializableCheck: {
