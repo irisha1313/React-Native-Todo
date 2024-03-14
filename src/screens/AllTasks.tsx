@@ -38,24 +38,9 @@ export const AllTasks: FC<IProps> = ({ navigation }) => {
 
   const [searchValue, setSearchValue] = useState('');
   const searchValueDebounced = useDebounce(searchValue, 500);
-  // const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-  // const [date, setDate] = useState(new Date());
-  // const showDatePicker = () => {
-  //   setDatePickerVisibility(true);
-  // };
-  // const hideDatePicker = () => {
-  //   setDatePickerVisibility(false);
-  // };
-  // const handleConfirm = date => {
-  //   console.warn('A date has been picked: ', date);
-  //   setDate(date);
-  //   hideDatePicker();
-  // };
-  // const currentDate = moment(date).format('l'); //
 
   const filteredTodos = filteredTodoByStatus().filter(item => {
     const titleTime = (item.title + item.date).toLowerCase();
-    // item.date.includes(currentDate);
     return titleTime.includes(searchValueDebounced.toLowerCase());
   });
 
@@ -92,7 +77,7 @@ export const AllTasks: FC<IProps> = ({ navigation }) => {
 
       {filteredTodos.length === 0 ? (
         <Text style={{ color: 'red', fontSize: 18 }}>
-          Sorry,i can't find the assignment you asked for.{' '}
+          Sorry,i can't find the assignment you asked for
         </Text>
       ) : (
         <FlatList
@@ -138,5 +123,22 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
     alignItems: 'flex-end',
     gap: 5,
+  },
+  ///
+  contentContainer: {
+    paddingHorizontal: 30,
+    borderRadius: 30,
+    alignContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 10,
+    backgroundColor: Colors.ligthBlue,
+  },
+  scrollView: {
+    minHeight: 100,
+    maxHeight: 420,
+    borderRadius: 30,
+    backgroundColor: Colors.ligthBlue,
+    borderColor: '#000',
+    borderWidth: 1,
   },
 });

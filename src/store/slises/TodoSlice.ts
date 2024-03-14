@@ -3,37 +3,14 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSelector, createSlice } from '@reduxjs/toolkit';
 import { RootState } from '../store';
 
-// Define a type for the slice state
 interface TodoState {
   todos: ITodo[];
   status: number;
 }
 
-// Define the initial state using that type
 const initialState: TodoState = {
   status: 0,
   todos: [
-    {
-      id: '12',
-      title: 'Create filter',
-      category: Category.GOAL,
-      date: '03/13/2024',
-      completed: false,
-    },
-    {
-      id: '122',
-      title: 'Go to the shop',
-      category: Category.TASK,
-      date: '03/13/2024',
-      completed: false,
-    },
-    {
-      id: '121',
-      title: 'get a drivers license',
-      category: Category.EVENT,
-      date: '03/14/2024',
-      completed: false,
-    },
     {
       id: '124',
       title: 'Go to the concert ',

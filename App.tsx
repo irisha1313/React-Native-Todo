@@ -4,6 +4,7 @@ import React from 'react';
 
 import { Navigation } from '@/Navigation/Navigation';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { View } from 'react-native-reanimated/lib/typescript/Animated';
 import { Provider } from 'react-redux';
 
 export default function App() {
@@ -19,4 +20,3 @@ export default function App() {
     </GestureHandlerRootView>
   );
 }
-//git commit -m "organized the components. added the filtration functionality by date  "
