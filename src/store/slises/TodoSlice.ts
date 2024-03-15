@@ -18,6 +18,34 @@ const initialState: TodoState = {
       date: '03/16/2024',
       completed: false,
     },
+    {
+      id: '34335',
+      title: 'Go tsdf concert ',
+      category: Category.EVENT,
+      date: '03/16/2024',
+      completed: false,
+    },
+    {
+      id: '13124',
+      title: 'Go to the concert ',
+      category: Category.EVENT,
+      date: '03/16/2024',
+      completed: false,
+    },
+    {
+      id: '13244124',
+      title: 'Go to the concert ',
+      category: Category.EVENT,
+      date: '03/16/2024',
+      completed: false,
+    },
+    {
+      id: '153244125554',
+      title: 'Go to the concert ',
+      category: Category.EVENT,
+      date: '03/16/2024',
+      completed: false,
+    },
   ],
 };
 
@@ -35,7 +63,6 @@ export const todoSlice = createSlice({
       };
       state.todos.push(newTack);
     },
-
     deleteTodo(state, action: PayloadAction<{ id: string }>) {
       state.todos = state.todos.filter(item => item.id !== action.payload.id);
     },
@@ -54,6 +81,30 @@ export const todoSlice = createSlice({
     searchTodo(state, action: PayloadAction<{ title: string }>) {
       state.todos.filter(item => item.title.includes(action.payload.title));
     },
+    // title, completed
+    editTodo(
+      state,
+      action: PayloadAction<{
+        title: string;
+        id: string;
+        completed: boolean;
+      }>,
+    ) {
+      const todo = state.todos.find(item => item.id === action.payload.id);
+      if (todo) {
+        todo.title = action.payload.title;
+        todo.completed = action.payload.completed;
+      }
+    },
+    changeStatus: (
+      state,
+      action: PayloadAction<{ id: string; category: Category }>,
+    ) => {
+      const { id, category } = action.payload;
+      state.todos = state.todos.map(e =>
+        e.id === id ? { ...e, category } : e,
+      );
+    },
   },
 });
 
@@ -64,6 +115,7 @@ export const {
   statusFilter,
   deleteAllTodos,
   searchTodo,
+  editTodo,
 } = todoSlice.actions;
 
 export default todoSlice.reducer;

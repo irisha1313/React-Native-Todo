@@ -1,41 +1,61 @@
 import { Button, Header, TackItem } from '@/components';
 import Colors from '@/constants/Colors';
-import { useAppSelector } from '@/hooks';
+import { useAppDispatch, useAppSelector } from '@/hooks';
 import { typedNavigation } from '@/types/navigation';
 import React, { FC } from 'react';
-import { FlatList, ScrollView, StyleSheet, Text, View } from 'react-native';
+import {
+  Dimensions,
+  FlatList,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface IProps {
   navigation: typedNavigation;
 }
+const WIDTH_CARD = Dimensions.get('window').width * 0.85;
+const ITEM_HEIGHT = 70;
+const WIDTH_SCREEN = Dimensions.get('window').width;
 
 export const Home: FC<IProps> = ({ navigation }) => {
   const insets = useSafeAreaInsets();
   const todos = useAppSelector(state => state.todos);
   const compleated = todos.filter(todo => todo.completed);
-  const ITEMHEIGTH = 100;
+  const dispatch = useAppDispatch();
+
   return (
     <>
       <Header />
-      <View style={styles.container}>
-        <View style={{ paddingTop: 40, position: 'absolute' }}>
-          <ScrollView
-            showsVerticalScrollIndicator={false}
-            contentContainerStyle={[[styles.contentContainer]]}
-            style={[
-              styles.scrollView,
-              { height: todos.length * ITEMHEIGTH, top: -80 },
-            ]}>
-            {todos.map((item, index) => {
-              if (!item.completed)
-                return <TackItem item={item} index={index} key={item.id} />;
-            })}
-          </ScrollView>
-        </View>
-        <View style={{ flex: 1 }} />
 
+      <View style={styles.container}>
+        <FlatList
+          showsVerticalScrollIndicator={false}
+          data={todos.filter(todo => !todo.completed)}
+          renderItem={({ item, index }) => (
+            <Pressable
+              onPress={() =>
+                navigation.navigate('EditTaskModal', {
+                  id: item.id,
+                  todo: item,
+                })
+              }>
+              <TackItem item={item} index={index} />
+            </Pressable>
+          )}
+          style={[
+            styles.flatListContainer,
+            {
+              top: -50,
+              maxHeight: 255,
+              marginBottom: -25,
+            },
+          ]}
+        />
         <Text style={styles.text}>Compleated ({compleated.length})</Text>
+
         {compleated.length === 0 ? (
           <View
             style={[
@@ -71,7 +91,13 @@ export const Home: FC<IProps> = ({ navigation }) => {
             ]}
           />
         )}
+
+        {/* <Button
+          onPress={() => navigation.navigate('Modal')}
+          title="Open Modal"
+        /> */}
         <View style={{ flex: 1 }} />
+
         <Button
           onPress={() => navigation.navigate('CreateTask')}
           title={'Add New Task'}
@@ -88,6 +114,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'Colors.white',
     alignItems: 'center',
   },
+
   text: {
     fontWeight: '600',
     fontSize: 16,
@@ -101,24 +128,5 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
     width: 360,
     borderRadius: 20,
-  },
-  contentContainer: {
-    paddingHorizontal: 20,
-    borderRadius: 30,
-    width: '100%',
-    alignContent: 'center',
-    alignItems: 'center',
-    paddingVertical: 20,
-    backgroundColor: Colors.ligthBlue,
-  },
-  scrollView: {
-    minHeight: 100,
-    maxHeight: 420,
-    borderRadius: 30,
-    minWidth: '100%',
-    width: '100%',
-    backgroundColor: Colors.ligthBlue,
-    borderColor: '#000',
-    borderWidth: 1,
   },
 });
